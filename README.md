@@ -4,8 +4,8 @@ keybinds
 
 - space is leader key
 - <c-h/j/k/l> - window nav
-- <c-a> - select all
-- <esc> - clear search
+- ctrl-a - select all
+- esc - clear search
 - space+sf - find files
 - space+sg - grep files
 - space+/ - find in buffer
