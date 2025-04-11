@@ -6,6 +6,7 @@ keybinds
 - <c-h/j/k/l> - window nav
 - ctrl-a - select all
 - esc - clear search
+- space+e - file tree
 - space+sf - find files
 - space+sg - grep files
 - space+/ - find in buffer
