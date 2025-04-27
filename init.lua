@@ -28,6 +28,9 @@ vim.opt.syntax = 'on' -- Enable syntax highlighting
 vim.opt.hidden = true -- Allow unsaved buffers in background
 vim.opt.wrap = false -- Disable line wrapping
 
+
+
+
 -- Key mappings
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') -- Clear search highlights
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>') -- Move to left window
