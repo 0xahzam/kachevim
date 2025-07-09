@@ -28,18 +28,15 @@ vim.opt.syntax = 'on' -- Enable syntax highlighting
 vim.opt.hidden = true -- Allow unsaved buffers in background
 vim.opt.wrap = false -- Disable line wrapping
 
-
-
-
 -- Key mappings
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') -- Clear search highlights
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>') -- Move to left window
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>') -- Move to right window
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>') -- Move to window below
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>') -- Move to window above
-vim.keymap.set('n', '<leader>n', ':bnext<CR>', { silent = true }) -- Next buffer
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')                   -- Clear search highlights
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>')                            -- Move to left window
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>')                            -- Move to right window
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>')                            -- Move to window below
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>')                            -- Move to window above
+vim.keymap.set('n', '<leader>n', ':bnext<CR>', { silent = true })     -- Next buffer
 vim.keymap.set('n', '<leader>p', ':bprevious<CR>', { silent = true }) -- Previous buffer
-vim.keymap.set('n', '<leader>d', ':bdelete<CR>', { silent = true }) -- Delete buffer
+vim.keymap.set('n', '<leader>d', ':bdelete<CR>', { silent = true })   -- Delete buffer
 
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -58,12 +55,16 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  'tpope/vim-sleuth', -- Detect indentation
+  'tpope/vim-sleuth',                     -- Detect indentation
   { 'numToStr/Comment.nvim', opts = {} }, -- Easy code commenting
 
   -- File explorer
   {
     "nvim-tree/nvim-tree.lua",
+    cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+    keys = {
+      { "\\", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
+    },
     config = function()
       require("nvim-tree").setup({
         renderer = {
@@ -87,8 +88,7 @@ require('lazy').setup({
           signcolumn = "no",
         },
       })
-      vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle file explorer' })
-    end
+    end,
   },
 
   -- Fuzzy finder
@@ -97,7 +97,7 @@ require('lazy').setup({
     event = 'VeryLazy', -- Load when needed
     branch = '0.1.x',
     dependencies = {
-      'nvim-lua/plenary.nvim', -- Required dependency
+      'nvim-lua/plenary.nvim',                                        -- Required dependency
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }, -- Faster fuzzy finding
     },
     config = function()
@@ -105,13 +105,13 @@ require('lazy').setup({
         defaults = {
           path_display = { 'truncate' }, -- Truncate path display
           cache_picker = {
-            num_pickers = 5, -- Cache recent pickers
+            num_pickers = 5,             -- Cache recent pickers
           },
         },
         pickers = {
           find_files = {
             theme = "dropdown", -- Use dropdown style
-            previewer = false, -- Disable previewer for speed
+            previewer = false,  -- Disable previewer for speed
           },
         },
       }
@@ -132,9 +132,9 @@ require('lazy').setup({
   -- LSP support
   {
     'neovim/nvim-lspconfig',
-    event = { 'BufReadPre', 'BufNewFile' }, -- Load only when opening files
+    event = { 'BufReadPre', 'BufNewFile' },    -- Load only when opening files
     dependencies = {
-      { 'williamboman/mason.nvim' }, -- Package manager for LSP
+      { 'williamboman/mason.nvim' },           -- Package manager for LSP
       { 'williamboman/mason-lspconfig.nvim' }, -- Bridge between Mason and LSP
     },
     config = function()
@@ -143,7 +143,7 @@ require('lazy').setup({
           border = "rounded", -- Rounded borders
         },
       })
-      
+
       -- LSP key mappings when server attaches
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
@@ -170,6 +170,16 @@ require('lazy').setup({
           },
         },
         tsserver = {},
+        julials = {
+          settings = {
+            julia = {
+              format = { indent = 2 },
+            },
+          },
+        },
+        rust_analyzer = {},
+        pyright = {},
+        clangd = {},
       }
 
       -- Setup automatic installations
@@ -189,12 +199,12 @@ require('lazy').setup({
   -- Auto-completion
   {
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter', -- Load only when entering insert mode
+    event = 'InsertEnter',        -- Load only when entering insert mode
     dependencies = {
-      { 'L3MON4D3/LuaSnip' }, -- Snippet engine
+      { 'L3MON4D3/LuaSnip' },     -- Snippet engine
       'saadparwaiz1/cmp_luasnip', -- Snippet source
-      'hrsh7th/cmp-nvim-lsp', -- LSP source
-      'hrsh7th/cmp-path', -- Path source
+      'hrsh7th/cmp-nvim-lsp',     -- LSP source
+      'hrsh7th/cmp-path',         -- Path source
     },
     config = function()
       local cmp = require 'cmp'
@@ -204,7 +214,7 @@ require('lazy').setup({
       cmp.setup {
         performance = {
           max_view_entries = 25, -- Limit displayed items
-          debounce = 60, -- Debounce completion
+          debounce = 60,         -- Debounce completion
         },
         snippet = {
           expand = function(args)
@@ -213,15 +223,15 @@ require('lazy').setup({
         },
         completion = { completeopt = 'menu,menuone,noinsert' }, -- Completion options
         mapping = cmp.mapping.preset.insert {
-          ['<C-n>'] = cmp.mapping.select_next_item(), -- Next item
-          ['<C-p>'] = cmp.mapping.select_prev_item(), -- Previous item
-          ['<C-y>'] = cmp.mapping.confirm { select = true }, -- Confirm selection
-          ['<C-Space>'] = cmp.mapping.complete {}, -- Show completion
+          ['<C-n>'] = cmp.mapping.select_next_item(),           -- Next item
+          ['<C-p>'] = cmp.mapping.select_prev_item(),           -- Previous item
+          ['<C-y>'] = cmp.mapping.confirm { select = true },    -- Confirm selection
+          ['<C-Space>'] = cmp.mapping.complete {},              -- Show completion
         },
         sources = {
           { name = 'nvim_lsp', priority = 1000 }, -- LSP completions (highest priority)
-          { name = 'luasnip', priority = 750 }, -- Snippets
-          { name = 'path', priority = 500 }, -- File paths
+          { name = 'luasnip',  priority = 750 },  -- Snippets
+          { name = 'path',     priority = 500 },  -- File paths
         },
       }
     end,
@@ -229,73 +239,77 @@ require('lazy').setup({
 
   -- Theme
   {
-    'navarasu/onedark.nvim',
-    priority = 1000, -- Load early
+    'rebelot/kanagawa.nvim',
+    priority = 1000,
     config = function()
-      require('onedark').setup({
-        style = 'dark', -- Dark theme style
-        transparent = true, -- Use transparent background
-        term_colors = true, -- Set terminal colors
-        code_style = {
-          comments = 'italic', -- Italic comments
-          keywords = 'bold', -- Bold keywords
-          functions = 'none', -- Default style for functions
-          strings = 'none', -- Default style for strings
-          variables = 'none', -- Default style for variables
+      require('kanagawa').setup({
+        compile = false,
+        transparent = false,
+        terminalColors = true,
+        dimInactive = true,
+        colors = {
+          theme = {
+            all = {
+              ui = {
+                bg_gutter = 'none',
+              },
+            },
+          },
         },
-        diagnostics = {
-          darker = true, -- Darker background for diagnostics
-          background = false, -- No diagnostic background
-        },
+        overrides = function(colors)
+          return {
+            NormalFloat = { bg = 'none' },
+            FloatBorder = { bg = 'none' },
+          }
+        end,
       })
-      require('onedark').load() -- Apply the theme
+      vim.cmd.colorscheme('kanagawa') -- other options: 'kanagawa-dragon', 'lotus'
     end,
   },
- 
+
   -- Status line
   {
     'nvim-lualine/lualine.nvim',
     event = 'VeryLazy', -- Load when needed
     opts = {
       options = {
-        theme = 'onedark', -- Match theme
+        theme = 'kanagawa',          -- Match theme
         component_separators = '|', -- Separator character
-        section_separators = '', -- No section separators
-        globalstatus = true, -- One statusline for all windows
+        section_separators = '',    -- No section separators
+        globalstatus = true,        -- One statusline for all windows
         refresh = {
-          statusline = 250, -- Update frequency
+          statusline = 250,         -- Update frequency
           tabline = 500,
           winbar = 500,
         },
       },
       sections = {
-        lualine_a = {'mode'}, -- Show mode
-        lualine_b = {'branch'}, -- Keep git branch display as requested
-        lualine_c = {'filename'}, -- Show filename
-        lualine_x = {'filetype'}, -- Show filetype
-        lualine_y = {'progress'}, -- Show progress
-        lualine_z = {'location'}, -- Show location
+        lualine_a = { 'mode' },     -- Show mode
+        lualine_b = { 'branch' },   -- Keep git branch display as requested
+        lualine_c = { 'filename' }, -- Show filename
+        lualine_x = { 'filetype' }, -- Show filetype
+        lualine_y = { 'progress' }, -- Show progress
+        lualine_z = { 'location' }, -- Show location
       },
     },
   },
-
   -- Syntax highlighting with Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate', -- Update parsers when updated
+    build = ':TSUpdate',                     -- Update parsers when updated
     event = { 'BufReadPost', 'BufNewFile' }, -- Load when needed
     config = function()
       require('nvim-treesitter.configs').setup({
-        ensure_installed = { 'lua', 'vim', 'javascript', 'typescript' },
-        auto_install = true, -- Auto install missing parsers
-        highlight = { 
-          enable = true, -- Enable highlighting
+        ensure_installed = { 'lua', 'vim', 'javascript', 'typescript', 'julia', 'rust', 'python', 'c', 'cpp' },
+        auto_install = true,                         -- Auto install missing parsers
+        highlight = {
+          enable = true,                             -- Enable highlighting
           additional_vim_regex_highlighting = false, -- Disable legacy highlighting
         },
-        indent = { enable = true }, -- Enable indentation
-        sync_install = false, -- Async installation
+        indent = { enable = true },                  -- Enable indentation
+        sync_install = false,                        -- Async installation
       })
-      
+
       require('nvim-treesitter.install').prefer_git = true -- Use git for installation
     end,
   },
